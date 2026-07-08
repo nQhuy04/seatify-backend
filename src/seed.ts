@@ -8,7 +8,7 @@ const prisma = new PrismaClient({
 });
 
 async function main() {
-  console.log('🌱 Bắt đầu gieo hạt (Seeding data)...');
+  console.log('(Seeding data)...');
 
   // 1. DỌN DẸP SẠCH SẼ NHÀ CỬA
   await prisma.ticketSeat.deleteMany();

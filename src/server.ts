@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import authRouter from './routes/auth.route';
 
 // Nạp biến môi trường từ file .env
 dotenv.config();
@@ -16,6 +17,8 @@ app.use(express.json()); // Cho phép Backend đọc data JSON từ Client gửi
 app.get('/', (req: Request, res: Response) => {
   res.send('Chào mừng đến với API Backend của Seatify!');
 });
+
+app.use('/api/auth', authRouter);
 
 // Lắng nghe cổng
 app.listen(PORT, () => {
