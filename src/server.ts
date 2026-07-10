@@ -1,7 +1,9 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import authRouter from './routes/auth.route';
+import authRouter from './routes/auth.routes';
+import movieRouter from './routes/movie.routes';
+import cinemaRouter from './routes/cinema.routes';
 
 // Nạp biến môi trường từ file .env
 dotenv.config();
@@ -19,8 +21,9 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/api/auth', authRouter);
+app.use('/api/movies', movieRouter);
+app.use('/api/cinemas', cinemaRouter);
 
-// Lắng nghe cổng
 app.listen(PORT, () => {
   console.log(`Server Seatify đang chạy thành công tại http://localhost:${PORT}`);
 });
