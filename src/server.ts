@@ -5,6 +5,7 @@ import authRouter from './routes/auth.routes';
 import movieRouter from './routes/movie.routes';
 import cinemaRouter from './routes/cinema.routes';
 import showtimeRouter from './routes/showtime.routes';
+import rootRouter from './routes/index';
 
 // Nạp biến môi trường từ file .env
 dotenv.config();
@@ -21,10 +22,7 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Chào mừng đến với API Backend của Seatify!');
 });
 
-app.use('/api/auth', authRouter);
-app.use('/api/movies', movieRouter);
-app.use('/api/cinemas', cinemaRouter);
-app.use('/api/showtimes', showtimeRouter);
+app.use('/api', rootRouter);
 
 app.listen(PORT, () => {
   console.log(`Server Seatify đang chạy thành công tại http://localhost:${PORT}`);

@@ -2,9 +2,16 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
+export interface AuthRequest extends Request {
+  user?: {
+    userId: string;
+    role: string;
+  };
+}
+
 dotenv.config();
 
-export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
+export const verifyToken = (req: AuthRequest, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -16,7 +23,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY as string);
 
-    (req as any).user = decoded; //req.user
+    req.user = decoded as { userId: string; role: string }; //req.user
 
     next();
   } catch (error) {
@@ -24,8 +31,8 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
   }
 };
 
-export const verifyAdmin = (req: Request, res: Response, next: NextFunction) => {
-  const user = (req as any).user;
+export const verifyAdmin = (req: AuthRequest, res: Response, next: NextFunction) => {
+  const user = req.user;
 
   if (user && user.role === 'ADMIN') {
     next();
