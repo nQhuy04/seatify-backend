@@ -20,8 +20,8 @@ model User {
   email     String    @unique
   password  String
   fullName  String
-  birthDay  DateTime? // Thêm dấu ? vì có thể lúc đăng ký chưa cần nhập ngay
-  phone     String?
+  birthDay  DateTime 
+  phone     String
   role      Role      @default(USER)
   createdAt DateTime  @default(now())
 

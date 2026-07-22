@@ -26,9 +26,11 @@ async function main() {
   const admin = await prisma.user.create({
     data: {
       email: 'admin@seatify.com',
-      password: 'hashed_password_123', // Ngày 4 chúng ta sẽ học mã hóa thật bằng bcrypt
+      password: 'hashed_password_123',
       fullName: 'Quản trị viên',
       role: Role.ADMIN,
+      phone: '0901234567',
+      birthDay: new Date('1990-01-01'),
     },
   });
 
@@ -38,6 +40,8 @@ async function main() {
       password: 'hashed_password_123',
       fullName: 'Khách hàng thân thiết',
       role: Role.USER,
+      phone: '0987654321',
+      birthDay: new Date('2000-05-15'),
     },
   });
   console.log('👤 Đã tạo User mẫu!');

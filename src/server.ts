@@ -1,10 +1,6 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import authRouter from './routes/auth.routes';
-import movieRouter from './routes/movie.routes';
-import cinemaRouter from './routes/cinema.routes';
-import showtimeRouter from './routes/showtime.routes';
 import rootRouter from './routes/index';
 
 // Nạp biến môi trường từ file .env

@@ -3,13 +3,13 @@ import { loginUser, registerUser } from '../services/auth.service';
 
 const register = async (req: Request, res: Response) => {
   try {
-    const { email, password, fullName } = req.body;
+    const { email, password, fullName, birthDay, phone } = req.body;
 
-    if (!email || !password) {
+    if (!email || !password || !fullName || !birthDay || !phone) {
       return res.status(400).json({ message: 'Vui lòng nhập đủ thông tin!' });
     }
 
-    const newUser = await registerUser(email, password, fullName);
+    const newUser = await registerUser(email, password, fullName, birthDay, phone);
 
     res.status(201).json({
       message: 'Đăng ký tài khoản thành công!',

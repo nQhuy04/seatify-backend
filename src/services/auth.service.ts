@@ -4,7 +4,13 @@ import jwt from 'jsonwebtoken';
 
 const prisma = new PrismaClient();
 
-const registerUser = async (email: string, password: string, fullName: string) => {
+const registerUser = async (
+  email: string,
+  password: string,
+  fullName: string,
+  birthDay: Date,
+  phone: string,
+) => {
   const existingUser = await prisma.user.findUnique({ where: { email: email } });
 
   if (existingUser) {
@@ -16,6 +22,8 @@ const registerUser = async (email: string, password: string, fullName: string) =
   const newUser = await prisma.user.create({
     data: {
       email,
+      birthDay: new Date(birthDay),
+      phone,
       password: hashedPassword,
       fullName,
     },
