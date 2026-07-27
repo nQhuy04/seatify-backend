@@ -90,6 +90,12 @@ model Movie {
   status       MovieStatus @default(COMING_SOON)
   createdAt    DateTime    @default(now())
   
+  director     String?
+  cast         String?
+  country      String?
+  language     String?
+  releaseDate  DateTime?  
+
   showtimes    Showtime[]
 }
 

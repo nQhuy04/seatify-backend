@@ -96,30 +96,50 @@ async function main() {
     data: [
       {
         title: 'Lật Mặt 7: Một Điều Ước',
-        description: 'Bộ phim cảm động về tình cảm gia đình của đạo diễn Lý Hải.',
-        posterUrl: 'https://example.com/lat-mat-7.jpg',
+        description:
+          'Câu chuyện kể về bà Hai, một người mẹ đơn thân tự mình nuôi 5 người con khôn lớn. Khi bà Hai gặp tai nạn, những người con đã trưởng thành, mỗi người một phương, phải đối mặt với trách nhiệm chăm sóc mẹ...',
+        posterUrl:
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEr4X9oEtYmqSOZFz2qTl22jQ2pvvXXyXVtsSf9ORneLc2P_yYAb01Pto&s=10',
         filmGenres: 'Tâm lý, Gia đình',
         duration: 138,
         ageRating: 'K',
         status: MovieStatus.NOW_PLAYING,
+        // DỮ LIỆU MỚI:
+        director: 'Lý Hải',
+        cast: 'Thanh Hiền, Trương Minh Cường, Đinh Y Nhung, Quách Ngọc Tuyên',
+        country: 'Việt Nam',
+        language: 'Tiếng Việt',
+        releaseDate: new Date('2026-04-26'),
       },
       {
         title: 'Godzilla x Kong: Đế Chế Mới',
-        description: 'Trận chiến hoành tráng giữa các siêu quái vật.',
-        posterUrl: 'https://example.com/godzilla.jpg',
+        description: 'Trận chiến hoành tráng giữa các siêu quái vật nhằm bảo vệ Trái Đất.',
+        posterUrl:
+          'https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/p/m/pm1067intl_excl_3d_1080x1350px_enguk_v2_r1.jpg',
         filmGenres: 'Hành động, Viễn tưởng',
         duration: 115,
         ageRating: 'C13',
         status: MovieStatus.NOW_PLAYING,
+        director: 'Adam Wingard',
+        cast: 'Rebecca Hall, Brian Tyree Henry, Dan Stevens',
+        country: 'Hoa Kỳ',
+        language: 'Phụ đề Tiếng Việt',
+        releaseDate: new Date('2026-03-29'),
       },
       {
         title: 'Deadpool & Wolverine',
-        description: 'Hành trình bá đạo của gã lính đánh thuê lắm mồm.',
-        posterUrl: 'https://example.com/deadpool.jpg',
+        description: 'Hành trình bá đạo của gã lính đánh thuê lắm mồm và dị nhân Người Sói.',
+        posterUrl:
+          'https://www.movieposters.com/cdn/shop/files/scan002_00e0a1a8-b4ad-49ff-861f-8dd64ac12a6d_1024x1024.jpg?v=1762977060',
         filmGenres: 'Hành động, Hài',
         duration: 120,
         ageRating: 'C18',
         status: MovieStatus.COMING_SOON,
+        director: 'Shawn Levy',
+        cast: 'Ryan Reynolds, Hugh Jackman, Emma Corrin',
+        country: 'Hoa Kỳ',
+        language: 'Phụ đề Tiếng Việt',
+        releaseDate: new Date('2026-07-26'),
       },
     ],
   });

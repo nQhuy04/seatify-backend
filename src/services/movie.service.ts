@@ -18,4 +18,15 @@ const getAllMovies = async () => {
   return movies;
 };
 
-export { getAllMovies };
+const getMovieById = async (id: string) => {
+  const movie = await prisma.movie.findUnique({
+    where: { id: id },
+  });
+
+  if (!movie) {
+    throw new Error('Không tìm thấy bộ phim này!');
+  }
+
+  return movie;
+};
+export { getAllMovies, getMovieById };
