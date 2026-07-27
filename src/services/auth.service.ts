@@ -11,7 +11,10 @@ const registerUser = async (
   birthDay: Date,
   phone: string,
 ) => {
-  const existingUser = await prisma.user.findUnique({ where: { email: email } });
+  const existingUser = await prisma.user.findUnique({
+    where: { email: email },
+    select: { id: true },
+  });
 
   if (existingUser) {
     throw new Error('Email này đã tồn tại!');

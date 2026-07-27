@@ -145,6 +145,64 @@ async function main() {
   });
   console.log('🎬 Đã thêm 3 bộ phim mẫu vào kho!');
 
+  // ==========================================
+  // 6. TẠO SUẤT CHIẾU MẪU (SHOWTIME)
+  // ==========================================
+  // Lấy lại bộ phim Lật Mặt 7 vừa tạo để lấy cái ID của nó
+  const latMat7 = await prisma.movie.findFirst({
+    where: { title: { contains: 'Lật Mặt 7' } },
+  });
+
+  if (latMat7) {
+    const showtime = await prisma.showtime.create({
+      data: {
+        movieId: latMat7.id,
+        roomId: room1.id, // Biến room1 đã được tạo ở bước 3
+        // Giờ chiếu: 20:00 ngày 30/07/2026 (Giờ VN) -> Trừ 7 tiếng ra giờ UTC là 13:00
+        startTime: new Date('2026-07-30T13:00:00.000Z'),
+        endTime: new Date('2026-07-30T15:30:00.000Z'),
+      },
+    });
+
+    // In cái ID suất chiếu ra Terminal để xíu nữa copy cho dễ
+    console.log(`\n=================================================`);
+    console.log(`⏱️ ĐÃ TẠO SUẤT CHIẾU! MÃ ID LÀ:`);
+    console.log(`👉 ${showtime.id} 👈`);
+    console.log(`=================================================\n`);
+
+    // ==========================================
+    // 7. TẠO VÉ ĐÃ BÁN (TICKET SEAT) MÔ PHỎNG
+    // ==========================================
+    // Tìm ID của các ghế A1, D4, D5, E7, E8 trong Phòng 1
+    const targetSeats = await prisma.seat.findMany({
+      where: {
+        roomId: room1.id,
+        OR: [
+          { row: 'A', number: 1 },
+          { row: 'D', number: 4 },
+          { row: 'D', number: 5 },
+          { row: 'E', number: 7 },
+          { row: 'E', number: 8 },
+        ],
+      },
+    });
+
+    // Tạo các vé với trạng thái BOOKED (Đã bán)
+    const ticketSeatData = targetSeats.map((seat) => ({
+      showtimeId: showtime.id,
+      seatId: seat.id,
+      price: seat.type === 'VIP' ? 120000 : 100000,
+      status: 'BOOKED' as const, // Ép kiểu TypeScript
+    }));
+
+    // Bắn hàng loạt vé xuống Database
+    await prisma.ticketSeat.createMany({
+      data: ticketSeatData,
+    });
+
+    console.log(`🎟️ Đã mô phỏng bán thành công ${ticketSeatData.length} ghế!`);
+  }
+
   console.log('✅ HOÀN TẤT QUÁ TRÌNH SEEDING DATA!');
 }
 

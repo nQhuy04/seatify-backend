@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getShowtimes } from '../services/showtime.service';
+import { getShowtimes, getBookedSeats } from '../services/showtime.service';
 
 const getShowtimesByFilter = async (req: Request, res: Response) => {
   try {
@@ -23,4 +23,26 @@ const getShowtimesByFilter = async (req: Request, res: Response) => {
   }
 };
 
-export { getShowtimesByFilter };
+const getSeats = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params; // Lấy showtimeId từ URL (/api/showtimes/123/seats)
+
+    if (!id) {
+      return res.status(400).json({ message: 'Thiếu ID suất chiếu!' });
+    }
+
+    const bookedSeats = await getBookedSeats(id as string);
+
+    res.status(200).json({
+      message: 'Lấy trạng thái ghế thành công!',
+      data: bookedSeats, // Dữ liệu trả về sẽ là mảng: ['A1', 'B2']
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      message: 'Lỗi máy chủ khi lấy trạng thái ghế!',
+      error: error.message,
+    });
+  }
+};
+
+export { getShowtimesByFilter, getSeats };

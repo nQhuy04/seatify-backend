@@ -1,8 +1,9 @@
 import { Router } from 'express';
-import { getShowtimesByFilter } from '../controllers/showtime.controller';
+import { getShowtimesByFilter, getSeats } from '../controllers/showtime.controller';
 
 const showtimeRouter = Router();
 
 showtimeRouter.get('/', getShowtimesByFilter);
+showtimeRouter.get('/:id/seats', getSeats);
 
 export default showtimeRouter;
