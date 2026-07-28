@@ -2,41 +2,38 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-const getShowtimes = async (movieId: string, cinemaId: string, dateString: string) => {
+const getShowtimes = async (movieId: string, cinemaId: string | undefined, dateString: string) => {
   const startDate = new Date(dateString);
   startDate.setHours(0, 0, 0, 0);
-
   const endDate = new Date(startDate);
   endDate.setDate(startDate.getDate() + 1);
 
+  // 1. Tạo hộp điều kiện linh hoạt
+  const whereCondition: any = {
+    movieId: movieId,
+    startTime: {
+      gte: startDate,
+      lt: endDate,
+    },
+  };
+
+  // Nếu khách có truyền cinemaId thì mới nhét thêm điều kiện lọc rạp vào hộp
+  if (cinemaId) {
+    whereCondition.room = { cinemaId: cinemaId };
+  }
+
   const showtimes = await prisma.showtime.findMany({
-    where: {
-      movieId: movieId,
-
-      room: {
-        cinemaId: cinemaId,
-      },
-
-      startTime: {
-        gte: startDate,
-        lt: endDate,
-      },
-    },
-
-    orderBy: {
-      startTime: 'asc',
-    },
-
+    where: whereCondition, // Thả hộp điều kiện vào đây
+    orderBy: { startTime: 'asc' },
     include: {
-      room: true,
+      // 2. PHÉP MÀU CỦA PRISMA: JOIN LỒNG NHAU (Lấy Suất chiếu -> Lấy Phòng -> Lấy luôn Tên Rạp)
+      room: {
+        include: { cinema: true },
+      },
       _count: {
         select: {
           ticketSeats: {
-            where: {
-              status: {
-                in: ['HOLDING', 'BOOKED'],
-              },
-            },
+            where: { status: { in: ['HOLDING', 'BOOKED'] } },
           },
         },
       },
@@ -50,11 +47,11 @@ const getShowtimes = async (movieId: string, cinemaId: string, dateString: strin
     return {
       id: st.id,
       startTime: st.startTime,
-      endTime: st.endTime,
       roomName: st.room.name,
+      cinemaName: st.room.cinema.name, // Lấy tên rạp
+      cinemaAddress: st.room.cinema.location, // Lấy địa chỉ rạp
       totalSeats: totalSeats,
       soldSeats: soldSeats,
-
       isFull: soldSeats >= totalSeats,
     };
   });

@@ -5,11 +5,15 @@ const getShowtimesByFilter = async (req: Request, res: Response) => {
   try {
     const { movieId, cinemaId, date } = req.query;
 
-    if (!movieId || !cinemaId || !date) {
-      return res.status(400).json({ message: 'Vui lòng nhập đủ thông tin!' });
+    if (!movieId || !date) {
+      return res.status(400).json({ message: 'Vui lòng cung cấp ID phim và ngày xem!' });
     }
 
-    const showTimes = await getShowtimes(movieId as string, cinemaId as string, date as string);
+    const showTimes = await getShowtimes(
+      movieId as string,
+      cinemaId as string | undefined,
+      date as string,
+    );
 
     return res.status(200).json({
       message: 'Lấy danh sách suất chiếu thành công!',
