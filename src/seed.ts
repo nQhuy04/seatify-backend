@@ -171,34 +171,35 @@ async function main() {
     console.log(`=================================================\n`);
 
     // ==========================================
-    // 7. TẠO VÉ ĐÃ BÁN (TICKET SEAT) MÔ PHỎNG
+    // 7. TẠO TẤT CẢ 100 VÉ CHO SUẤT CHIẾU
     // ==========================================
-    // Tìm ID của các ghế A1, D4, D5, E7, E8 trong Phòng 1
-    const targetSeats = await prisma.seat.findMany({
-      where: {
-        roomId: room1.id,
-        OR: [
-          { row: 'A', number: 1 },
-          { row: 'D', number: 4 },
-          { row: 'D', number: 5 },
-          { row: 'E', number: 7 },
-          { row: 'E', number: 8 },
-        ],
-      },
+    // Lấy toàn bộ 100 ghế vật lý của Phòng 1
+    const allPhysicalSeats = await prisma.seat.findMany({
+      where: { roomId: room1.id },
     });
 
-    // Tạo các vé với trạng thái BOOKED (Đã bán)
-    const ticketSeatData = targetSeats.map((seat) => ({
-      showtimeId: showtime.id,
-      seatId: seat.id,
-      price: seat.type === 'VIP' ? 120000 : 100000,
-      status: 'BOOKED' as const, // Ép kiểu TypeScript
-    }));
+    const mockBookedNames = ['A1', 'D4', 'D5', 'E7', 'E8'];
 
-    // Bắn hàng loạt vé xuống Database
+    // Biến 100 ghế vật lý thành 100 vé (TicketSeat)
+    const ticketSeatData = allPhysicalSeats.map((seat) => {
+      const seatName = `${seat.row}${seat.number}`;
+      const isBooked = mockBookedNames.includes(seatName);
+
+      return {
+        showtimeId: showtime.id,
+        seatId: seat.id,
+        price: seat.type === 'VIP' ? 120000 : 100000,
+        // Nếu nằm trong mảng mock thì BOOKED, còn lại thì AVAILABLE
+        status: isBooked ? 'BOOKED' : ('AVAILABLE' as any),
+      };
+    });
+
+    // Bắn hàng loạt 100 vé xuống Database
     await prisma.ticketSeat.createMany({
       data: ticketSeatData,
     });
+
+    console.log(`🎟️ Đã tạo thành công 100 vé cho suất chiếu (5 BOOKED, 95 AVAILABLE)!`);
 
     console.log(`🎟️ Đã mô phỏng bán thành công ${ticketSeatData.length} ghế!`);
   }
