@@ -58,7 +58,7 @@ async function main() {
   const room1 = await prisma.room.create({
     data: {
       name: 'Phòng 1 (Standard)',
-      totalSeats: 100,
+      totalSeats: 180,
       cinemaId: cinema.id,
     },
   });
@@ -69,7 +69,7 @@ async function main() {
   const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 
   for (const row of rows) {
-    for (let number = 1; number <= 10; number++) {
+    for (let number = 1; number <= 18; number++) {
       // Logic phân loại ghế ảo ma:
       // Hàng A, B, C: Ghế thường
       // Hàng D đến H: Ghế VIP
@@ -94,6 +94,7 @@ async function main() {
   // 5. TẠO DỮ LIỆU PHIM MẪU
   await prisma.movie.createMany({
     data: [
+      // --- PHIM ĐANG CHIẾU (NOW_PLAYING) ---
       {
         title: 'Lật Mặt 7: Một Điều Ước',
         description:
@@ -127,8 +128,57 @@ async function main() {
         releaseDate: new Date('2026-03-29'),
       },
       {
+        title: 'Mai',
+        description:
+          'Câu chuyện về cuộc đời của một người phụ nữ tên Mai, mang trong mình nhiều tổn thương trong quá khứ và khát khao hạnh phúc.',
+        posterUrl:
+          'https://cdn-images.vtv.vn/562122370168008704/2023/11/28/photo-1-17011453442011344132442.jpg',
+        filmGenres: 'Tâm lý, Tình cảm',
+        duration: 131,
+        ageRating: 'C18',
+        status: MovieStatus.NOW_PLAYING,
+        director: 'Trấn Thành',
+        cast: 'Phương Anh Đào, Tuấn Trần, Hồng Đào',
+        country: 'Việt Nam',
+        language: 'Tiếng Việt',
+        releaseDate: new Date('2026-02-10'),
+      },
+      {
+        title: 'Kung Fu Panda 4',
+        description:
+          'Gấu trúc Po phải đối mặt với một kẻ thù mới có khả năng biến hình, trong khi đang tìm kiếm người kế vị cho ngôi vị Thần Long Đại Hiệp.',
+        posterUrl: 'https://image.tmdb.org/t/p/w500/kDp1vUBnMpe8ak4rjgl3cLELqjU.jpg',
+        filmGenres: 'Hoạt hình, Hài, Gia đình',
+        duration: 94,
+        ageRating: 'K',
+        status: MovieStatus.NOW_PLAYING,
+        director: 'Mike Mitchell',
+        cast: 'Jack Black, Awkwafina, Viola Davis',
+        country: 'Hoa Kỳ',
+        language: 'Lồng tiếng Việt',
+        releaseDate: new Date('2026-03-08'),
+      },
+      {
+        title: 'Dune: Hành Tinh Cát - Phần 2',
+        description:
+          'Paul Atreides tiếp tục hành trình trả thù những kẻ đã hủy hoại gia đình mình, đồng thời phải lựa chọn giữa tình yêu và số phận của vũ trụ.',
+        posterUrl: 'https://image.tmdb.org/t/p/w500/8b8R8l88Qje9dn9OE8Ez05mglD2.jpg',
+        filmGenres: 'Hành động, Viễn tưởng',
+        duration: 166,
+        ageRating: 'C16',
+        status: MovieStatus.NOW_PLAYING,
+        director: 'Denis Villeneuve',
+        cast: 'Timothée Chalamet, Zendaya',
+        country: 'Hoa Kỳ',
+        language: 'Phụ đề Tiếng Việt',
+        releaseDate: new Date('2026-03-01'),
+      },
+
+      // --- PHIM SẮP CHIẾU (COMING_SOON) ---
+      {
         title: 'Deadpool & Wolverine',
-        description: 'Hành trình bá đạo của gã lính đánh thuê lắm mồm và dị nhân Người Sói.',
+        description:
+          'Hành trình bá đạo của gã lính đánh thuê lắm mồm và dị nhân Người Sói. Cả hai phải gạt bỏ hiềm khích để cứu lấy Đa vũ trụ.',
         posterUrl:
           'https://www.movieposters.com/cdn/shop/files/scan002_00e0a1a8-b4ad-49ff-861f-8dd64ac12a6d_1024x1024.jpg?v=1762977060',
         filmGenres: 'Hành động, Hài',
@@ -136,14 +186,62 @@ async function main() {
         ageRating: 'C18',
         status: MovieStatus.COMING_SOON,
         director: 'Shawn Levy',
-        cast: 'Ryan Reynolds, Hugh Jackman, Emma Corrin',
+        cast: 'Ryan Reynolds, Hugh Jackman',
         country: 'Hoa Kỳ',
         language: 'Phụ đề Tiếng Việt',
         releaseDate: new Date('2026-07-26'),
       },
+      {
+        title: 'Kẻ Trộm Mặt Trăng 4',
+        description:
+          'Gru và gia đình chào đón thành viên mới, nhưng sớm phải chạy trốn khỏi một ác nhân mới vượt ngục.',
+        posterUrl:
+          'https://cdn.galaxycine.vn/media/2024/6/20/despicable-me-4-500_1718865149847.jpg',
+        filmGenres: 'Hoạt hình, Hài',
+        duration: 95,
+        ageRating: 'K',
+        status: MovieStatus.COMING_SOON,
+        director: 'Chris Renaud',
+        cast: 'Steve Carell, Kristen Wiig',
+        country: 'Hoa Kỳ',
+        language: 'Lồng tiếng Việt',
+        releaseDate: new Date('2026-07-05'),
+      },
+      {
+        title: 'Venom: Kèo Cuối',
+        description:
+          'Eddie và Venom đang chạy trốn khỏi cả hai thế giới của họ. Khi lưới bủa vây thu hẹp, bộ đôi phải đưa ra quyết định tàn khốc.',
+        posterUrl: 'https://image.tmdb.org/t/p/w500/aosm8NMQ3UyoBVpSxyimorCQykC.jpg',
+        filmGenres: 'Hành động, Viễn tưởng',
+        duration: 110,
+        ageRating: 'C16',
+        status: MovieStatus.COMING_SOON,
+        director: 'Kelly Marcel',
+        cast: 'Tom Hardy, Chiwetel Ejiofor',
+        country: 'Hoa Kỳ',
+        language: 'Phụ đề Tiếng Việt',
+        releaseDate: new Date('2026-10-25'),
+      },
+
+      // --- PHIM ĐÃ GỠ (ARCHIVED) - DÙNG ĐỂ TEST CÚ LỌC CỦA BACKEND ---
+      {
+        title: 'Avatar: Dòng Chảy Của Nước',
+        description:
+          'Jake Sully sống cùng gia đình mới ở hành tinh Pandora, cho đến khi một mối đe dọa cũ trở lại.',
+        posterUrl: 'https://image.tmdb.org/t/p/w500/t6HIqrNDIGGLt38Aw1R48k88q4i.jpg',
+        filmGenres: 'Hành động, Phiêu lưu',
+        duration: 192,
+        ageRating: 'C13',
+        status: MovieStatus.ARCHIVED,
+        director: 'James Cameron',
+        cast: 'Sam Worthington, Zoe Saldaña',
+        country: 'Hoa Kỳ',
+        language: 'Phụ đề Tiếng Việt',
+        releaseDate: new Date('2022-12-16'),
+      },
     ],
   });
-  console.log('🎬 Đã thêm 3 bộ phim mẫu vào kho!');
+  console.log('🎬 Đã thêm phim mẫu vào kho!');
 
   // ==========================================
   // 6. TẠO SUẤT CHIẾU MẪU (SHOWTIME)

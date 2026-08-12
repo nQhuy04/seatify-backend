@@ -1,15 +1,15 @@
 import { Request, Response } from 'express';
-import { holdSeats, getBookingById } from '../services/booking.service';
+import { holdSeats, getBookingById, getMyBookings } from '../services/booking.service';
 
-export const holdBooking = async (req: Request, res: Response) => {
+const holdBooking = async (req: Request, res: Response) => {
   try {
-    const { showtimeId, seatNames, guestInfo, totalPrice } = req.body;
+    const { showtimeId, seatNames, guestInfo, totalPrice, userId } = req.body;
 
     if (!showtimeId || !seatNames || seatNames.length === 0 || !guestInfo || !totalPrice) {
       return res.status(400).json({ message: 'Thiếu thông tin đặt vé!' });
     }
 
-    const booking = await holdSeats(showtimeId, seatNames, guestInfo, totalPrice);
+    const booking = await holdSeats(showtimeId, seatNames, guestInfo, totalPrice, userId);
 
     res.status(201).json({
       message: 'Giữ ghế thành công! Vui lòng thanh toán trong 5 phút.',
@@ -24,7 +24,7 @@ export const holdBooking = async (req: Request, res: Response) => {
   }
 };
 
-export const getBooking = async (req: Request, res: Response) => {
+const getBooking = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const booking = await getBookingById(id as string);
@@ -33,3 +33,17 @@ export const getBooking = async (req: Request, res: Response) => {
     res.status(404).json({ message: error.message || 'Lỗi server' });
   }
 };
+
+const getMyHistory = async (req: Request, res: Response) => {
+  try {
+    // Ông verifyToken đã nhét user vào req rồi, ta chỉ việc lấy ra xài
+    const userId = (req as any).user.userId;
+    const bookings = await getMyBookings(userId);
+
+    res.status(200).json({ message: 'Lấy lịch sử thành công', data: bookings });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message || 'Lỗi server' });
+  }
+};
+
+export { holdBooking, getBooking, getMyHistory };

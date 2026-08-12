@@ -8,11 +8,12 @@ interface GuestInfo {
   phone: string;
 }
 
-export const holdSeats = async (
+const holdSeats = async (
   showtimeId: string,
   seatNames: string[],
   guestInfo: GuestInfo,
   totalPrice: number,
+  userId?: string,
 ) => {
   // 1. Phân tách mảng tên ghế ['A1', 'B2'] thành Row và Number để tìm trong DB
   // VD: 'A1' -> row: 'A', number: 1
@@ -68,6 +69,7 @@ export const holdSeats = async (
     // 6. TẤT CẢ GHẾ ĐỀU AN TOÀN -> TẠO HÓA ĐƠN NHÁP
     const newBooking = await tx.booking.create({
       data: {
+        userId: userId || null, //Kết nối với hóa đơn khách
         guestName: guestInfo.fullName,
         guestEmail: guestInfo.email,
         guestPhone: guestInfo.phone,
@@ -93,7 +95,7 @@ export const holdSeats = async (
   });
 };
 
-export const getBookingById = async (bookingId: string) => {
+const getBookingById = async (bookingId: string) => {
   const booking = await prisma.booking.findUnique({
     where: { id: bookingId },
     // Dùng phép thuật JOIN sâu 4 tầng của Prisma để lôi toàn bộ thông tin lên mặt đất!
@@ -112,3 +114,22 @@ export const getBookingById = async (bookingId: string) => {
   if (!booking) throw new Error('Không tìm thấy hóa đơn này!');
   return booking;
 };
+
+const getMyBookings = async (userId: string) => {
+  const bookings = await prisma.booking.findMany({
+    where: { userId: userId }, // Chỉ lấy hóa đơn của ông này
+    orderBy: { createdAt: 'desc' }, // Xếp hóa đơn mới nhất lên đầu
+    include: {
+      ticketSeats: {
+        include: {
+          showtime: {
+            include: { movie: true, room: { include: { cinema: true } } },
+          },
+        },
+      },
+    },
+  });
+  return bookings;
+};
+
+export { holdSeats, getBookingById, getMyBookings };
