@@ -1,5 +1,6 @@
 import { PrismaClient, Role, SeatType, MovieStatus } from '@prisma/client';
 import dotenv from 'dotenv';
+import bcrypt from 'bcrypt';
 
 dotenv.config();
 
@@ -23,11 +24,13 @@ async function main() {
   console.log('🧹 Đã dọn dẹp xong dữ liệu cũ!');
 
   // 2. TẠO TÀI KHOẢN MẪU (ADMIN & USER)
+  const defaultPassword = await bcrypt.hash('123456', 10);
+
   const admin = await prisma.user.create({
     data: {
       email: 'admin@seatify.com',
-      password: 'hashed_password_123',
-      fullName: 'Quản trị viên',
+      password: defaultPassword,
+      fullName: 'Sếp Tổng Seatify',
       role: Role.ADMIN,
       phone: '0901234567',
       birthDay: new Date('1990-01-01'),
@@ -37,7 +40,7 @@ async function main() {
   const user = await prisma.user.create({
     data: {
       email: 'user@gmail.com',
-      password: 'hashed_password_123',
+      password: defaultPassword,
       fullName: 'Khách hàng thân thiết',
       role: Role.USER,
       phone: '0987654321',
@@ -162,7 +165,8 @@ async function main() {
         title: 'Dune: Hành Tinh Cát - Phần 2',
         description:
           'Paul Atreides tiếp tục hành trình trả thù những kẻ đã hủy hoại gia đình mình, đồng thời phải lựa chọn giữa tình yêu và số phận của vũ trụ.',
-        posterUrl: 'https://image.tmdb.org/t/p/w500/8b8R8l88Qje9dn9OE8Ez05mglD2.jpg',
+        posterUrl:
+          'https://upload.wikimedia.org/wikipedia/vi/9/94/Dune_2_VN_poster.jpg?utm_source=vi.wikipedia.org&utm_campaign=index&utm_content=original',
         filmGenres: 'Hành động, Viễn tưởng',
         duration: 166,
         ageRating: 'C16',

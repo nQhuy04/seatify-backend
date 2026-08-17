@@ -1,5 +1,10 @@
 import { Request, Response } from 'express';
-import { holdSeats, getBookingById, getMyBookings } from '../services/booking.service';
+import {
+  holdSeats,
+  getBookingById,
+  getMyBookings,
+  cancelBooking,
+} from '../services/booking.service';
 
 const holdBooking = async (req: Request, res: Response) => {
   try {
@@ -46,4 +51,18 @@ const getMyHistory = async (req: Request, res: Response) => {
   }
 };
 
-export { holdBooking, getBooking, getMyHistory };
+const cancelBookingController = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    await cancelBooking(id as string);
+    res.status(200).json({ message: 'Đã hủy đơn hàng và nhả ghế thành công!' });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(400).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: 'Lỗi server khi hủy đơn!' });
+    }
+  }
+};
+
+export { holdBooking, getBooking, getMyHistory, cancelBookingController };

@@ -132,4 +132,33 @@ const getMyBookings = async (userId: string) => {
   return bookings;
 };
 
-export { holdSeats, getBookingById, getMyBookings };
+//HỦY ĐƠN VÀ TRẢ GHẾ
+const cancelBooking = async (bookingId: string) => {
+  return await prisma.$transaction(async (tx) => {
+    // 1. Kiểm tra hóa đơn
+    const booking = await tx.booking.findUnique({ where: { id: bookingId } });
+    if (!booking) throw new Error('Không tìm thấy hóa đơn!');
+    if (booking.status !== 'PENDING')
+      throw new Error('Chỉ có thể hủy hóa đơn đang chờ thanh toán!');
+
+    // 2. Đổi trạng thái hóa đơn thành FAILED (Đã hủy)
+    const updatedBooking = await tx.booking.update({
+      where: { id: bookingId },
+      data: { status: 'FAILED' },
+    });
+
+    // 3. Trả lại toàn bộ ghế của hóa đơn này về thị trường
+    await tx.ticketSeat.updateMany({
+      where: { bookingId: bookingId },
+      data: {
+        status: 'AVAILABLE', // Ghế trở lại màu trắng
+        bookingId: null, // Gỡ liên kết hóa đơn
+        lockedUntil: null, // Gỡ đồng hồ khóa
+      },
+    });
+
+    return updatedBooking;
+  });
+};
+
+export { holdSeats, getBookingById, getMyBookings, cancelBooking };
