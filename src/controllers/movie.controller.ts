@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getAllMovies, getMovieById } from '../services/movie.service';
+import { getAllMovies, getMovieById, addMovie } from '../services/movie.service';
 
 const getMovies = async (req: Request, res: Response) => {
   try {
@@ -36,4 +36,18 @@ const getMovie = async (req: Request, res: Response) => {
   }
 };
 
-export { getMovies, getMovie };
+const createMovie = async (req: Request, res: Response) => {
+  try {
+    const newMovie = await addMovie(req.body);
+    res.status(201).json({
+      message: 'Thêm phim mới thành công!',
+      data: newMovie,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      message: error.message || 'Lỗi khi thêm phim mới!',
+    });
+  }
+};
+
+export { getMovies, getMovie, createMovie };

@@ -10,7 +10,13 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors()); // Cho phép Frontend gọi API không bị chặn
+// app.use(cors()); // Cho phép Frontend gọi API không bị chặn
+app.use(
+  cors({
+    origin: ['http://localhost:5173', ''], // Thêm link FE public vào đây
+    credentials: true,
+  }),
+);
 app.use(express.json()); // Cho phép Backend đọc data JSON từ Client gửi lên
 
 // Route cơ bản để test

@@ -100,6 +100,7 @@ async function main() {
       // --- PHIM ĐANG CHIẾU (NOW_PLAYING) ---
       {
         title: 'Lật Mặt 7: Một Điều Ước',
+        trailerUrl: 'https://www.youtube.com/watch?v=QdtPQ0wV53M',
         description:
           'Câu chuyện kể về bà Hai, một người mẹ đơn thân tự mình nuôi 5 người con khôn lớn. Khi bà Hai gặp tai nạn, những người con đã trưởng thành, mỗi người một phương, phải đối mặt với trách nhiệm chăm sóc mẹ...',
         posterUrl:
@@ -117,6 +118,7 @@ async function main() {
       },
       {
         title: 'Godzilla x Kong: Đế Chế Mới',
+        trailerUrl: 'https://www.youtube.com/watch?v=lV1OOlGwExM',
         description: 'Trận chiến hoành tráng giữa các siêu quái vật nhằm bảo vệ Trái Đất.',
         posterUrl:
           'https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/p/m/pm1067intl_excl_3d_1080x1350px_enguk_v2_r1.jpg',
@@ -132,6 +134,7 @@ async function main() {
       },
       {
         title: 'Mai',
+        trailerUrl: 'https://youtu.be/Yz96EBNwMGw?si=7z2tesx1Lli-Uc7B',
         description:
           'Câu chuyện về cuộc đời của một người phụ nữ tên Mai, mang trong mình nhiều tổn thương trong quá khứ và khát khao hạnh phúc.',
         posterUrl:
@@ -148,6 +151,7 @@ async function main() {
       },
       {
         title: 'Kung Fu Panda 4',
+        trailerUrl: 'https://www.youtube.com/watch?v=_inKs4eeHiI',
         description:
           'Gấu trúc Po phải đối mặt với một kẻ thù mới có khả năng biến hình, trong khi đang tìm kiếm người kế vị cho ngôi vị Thần Long Đại Hiệp.',
         posterUrl: 'https://image.tmdb.org/t/p/w500/kDp1vUBnMpe8ak4rjgl3cLELqjU.jpg',
@@ -163,6 +167,7 @@ async function main() {
       },
       {
         title: 'Dune: Hành Tinh Cát - Phần 2',
+        trailerUrl: 'https://www.youtube.com/watch?v=U2Qp5pL3ovA',
         description:
           'Paul Atreides tiếp tục hành trình trả thù những kẻ đã hủy hoại gia đình mình, đồng thời phải lựa chọn giữa tình yêu và số phận của vũ trụ.',
         posterUrl:
@@ -181,6 +186,7 @@ async function main() {
       // --- PHIM SẮP CHIẾU (COMING_SOON) ---
       {
         title: 'Deadpool & Wolverine',
+        trailerUrl: 'https://www.youtube.com/watch?v=73_1biulkYk',
         description:
           'Hành trình bá đạo của gã lính đánh thuê lắm mồm và dị nhân Người Sói. Cả hai phải gạt bỏ hiềm khích để cứu lấy Đa vũ trụ.',
         posterUrl:
@@ -197,6 +203,7 @@ async function main() {
       },
       {
         title: 'Kẻ Trộm Mặt Trăng 4',
+        trailerUrl: 'https://youtu.be/S1dnnQsY0QU?si=z-UpSphQZMNB7o1I',
         description:
           'Gru và gia đình chào đón thành viên mới, nhưng sớm phải chạy trốn khỏi một ác nhân mới vượt ngục.',
         posterUrl:
@@ -213,6 +220,7 @@ async function main() {
       },
       {
         title: 'Venom: Kèo Cuối',
+        trailerUrl: 'https://youtu.be/id1rfr_KZWg?si=l6WD5osdLS3-Ij03',
         description:
           'Eddie và Venom đang chạy trốn khỏi cả hai thế giới của họ. Khi lưới bủa vây thu hẹp, bộ đôi phải đưa ra quyết định tàn khốc.',
         posterUrl: 'https://image.tmdb.org/t/p/w500/aosm8NMQ3UyoBVpSxyimorCQykC.jpg',
@@ -230,6 +238,7 @@ async function main() {
       // --- PHIM ĐÃ GỠ (ARCHIVED) - DÙNG ĐỂ TEST CÚ LỌC CỦA BACKEND ---
       {
         title: 'Avatar: Dòng Chảy Của Nước',
+        trailerUrl: 'https://youtu.be/gq2xKJXYZ80?si=3iBUsiSgPht9mm9G',
         description:
           'Jake Sully sống cùng gia đình mới ở hành tinh Pandora, cho đến khi một mối đe dọa cũ trở lại.',
         posterUrl: 'https://image.tmdb.org/t/p/w500/t6HIqrNDIGGLt38Aw1R48k88q4i.jpg',

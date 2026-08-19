@@ -84,6 +84,7 @@ model Movie {
   description  String?
   movieContent String?
   posterUrl    String?
+  trailerUrl   String?  
   filmGenres   String?
   duration     Int
   ageRating    String

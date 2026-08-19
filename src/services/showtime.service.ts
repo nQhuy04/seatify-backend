@@ -84,4 +84,57 @@ const getBookedSeats = async (showtimeId: string) => {
   return bookedSeatIds;
 };
 
-export { getShowtimes, getBookedSeats };
+//Admin CRUD
+const createShowtime = async (
+  movieId: string,
+  roomId: string,
+  startTime: string,
+  endTime: string,
+) => {
+  // BỌC TRONG TRANSACTION: Phải tạo thành công cả Suất Chiếu lẫn 180 cái Vé thì mới lưu!
+  return await prisma.$transaction(async (tx) => {
+    // 1. TẠO SUẤT CHIẾU
+    const newShowtime = await tx.showtime.create({
+      data: {
+        movieId,
+        roomId,
+        startTime: new Date(startTime),
+        endTime: new Date(endTime),
+      },
+    });
+
+    // 2. LẤY DANH SÁCH GHẾ VẬT LÝ CỦA PHÒNG CHIẾU NÀY
+    const physicalSeats = await tx.seat.findMany({
+      where: { roomId: roomId },
+    });
+
+    if (physicalSeats.length === 0) {
+      throw new Error('Phòng chiếu này chưa có ghế vật lý nào được thiết lập!');
+    }
+
+    // 3. THUẬT TOÁN "MÁY IN VÉ" (Biến Ghế thành Vé)
+    const ticketSeatData = physicalSeats.map((seat) => {
+      // Chỉ lưu TIỀN PHỤ THU (Surcharge) của ghế vào vé này
+      // (Vì ta chưa biết khách mua là Người lớn hay HSSV)
+      let surcharge = 0; // Ghế thường phụ thu 0đ
+      if (seat.type === 'VIP') surcharge = 20000; // VIP phụ thu 20k
+      if (seat.type === 'COUPLE') surcharge = 25000; // Couple phụ thu 25k/ghế
+
+      return {
+        showtimeId: newShowtime.id,
+        seatId: seat.id,
+        price: surcharge, // Lưu tiền phụ thu vào đây
+        status: 'AVAILABLE' as any,
+      };
+    });
+
+    // 4. BULK INSERT (Bắn 180 vé xuống DB trong 1 câu lệnh duy nhất)
+    await tx.ticketSeat.createMany({
+      data: ticketSeatData,
+    });
+
+    return newShowtime;
+  });
+};
+
+export { getShowtimes, getBookedSeats, createShowtime };

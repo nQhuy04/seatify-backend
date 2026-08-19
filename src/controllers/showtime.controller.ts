@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getShowtimes, getBookedSeats } from '../services/showtime.service';
+import { getShowtimes, getBookedSeats, createShowtime } from '../services/showtime.service';
 
 const getShowtimesByFilter = async (req: Request, res: Response) => {
   try {
@@ -49,4 +49,28 @@ const getSeats = async (req: Request, res: Response) => {
   }
 };
 
-export { getShowtimesByFilter, getSeats };
+const addShowtime = async (req: Request, res: Response) => {
+  try {
+    const { movieId, roomId, startTime, endTime } = req.body;
+
+    // Validation cơ bản
+    if (!movieId || !roomId || !startTime || !endTime) {
+      return res.status(400).json({ message: 'Vui lòng nhập đủ thông tin suất chiếu!' });
+    }
+
+    // Gọi đầu bếp
+    const newShowtime = await createShowtime(movieId, roomId, startTime, endTime);
+
+    res.status(201).json({
+      message: 'Tạo suất chiếu và khởi tạo 180 vé thành công!',
+      data: newShowtime,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      message: 'Lỗi máy chủ khi tạo suất chiếu!',
+      error: error.message,
+    });
+  }
+};
+
+export { getShowtimesByFilter, getSeats, addShowtime };
