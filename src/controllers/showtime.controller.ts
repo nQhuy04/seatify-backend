@@ -1,5 +1,10 @@
 import { Request, Response } from 'express';
-import { getShowtimes, getBookedSeats, createShowtime } from '../services/showtime.service';
+import {
+  getShowtimes,
+  getBookedSeats,
+  createShowtime,
+  getShowtimeById,
+} from '../services/showtime.service';
 
 const getShowtimesByFilter = async (req: Request, res: Response) => {
   try {
@@ -49,6 +54,16 @@ const getSeats = async (req: Request, res: Response) => {
   }
 };
 
+const getShowtimeDetail = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const showtime = await getShowtimeById(id as string);
+    res.status(200).json({ message: 'Thành công', data: showtime });
+  } catch (error: any) {
+    res.status(404).json({ message: error.message || 'Lỗi server' });
+  }
+};
+
 const addShowtime = async (req: Request, res: Response) => {
   try {
     const { movieId, roomId, startTime, endTime } = req.body;
@@ -73,4 +88,4 @@ const addShowtime = async (req: Request, res: Response) => {
   }
 };
 
-export { getShowtimesByFilter, getSeats, addShowtime };
+export { getShowtimesByFilter, getSeats, getShowtimeDetail, addShowtime };

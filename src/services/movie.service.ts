@@ -51,4 +51,28 @@ const addMovie = async (data: any) => {
   });
   return newMovie;
 };
-export { getAllMovies, getMovieById, addMovie };
+
+const updateMovie = async (id: string, data: any) => {
+  const updatedMovie = await prisma.movie.update({
+    where: { id: id },
+    data: {
+      title: data.title,
+      description: data.description,
+      posterUrl: data.posterUrl,
+      trailerUrl: data.trailerUrl,
+      filmGenres: data.filmGenres,
+      duration: parseInt(data.duration),
+      ageRating: data.ageRating,
+      status: data.status,
+      director: data.director,
+      cast: data.cast,
+      country: data.country,
+      language: data.language,
+      releaseDate: data.releaseDate ? new Date(data.releaseDate) : null,
+      endDate: data.endDate ? new Date(data.endDate) : null, // Thêm ngày kết thúc
+    },
+  });
+  return updatedMovie;
+};
+
+export { getAllMovies, getMovieById, addMovie, updateMovie };

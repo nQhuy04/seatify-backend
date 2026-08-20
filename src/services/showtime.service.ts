@@ -84,6 +84,21 @@ const getBookedSeats = async (showtimeId: string) => {
   return bookedSeatIds;
 };
 
+const getShowtimeById = async (id: string) => {
+  const showtime = await prisma.showtime.findUnique({
+    where: { id: id },
+    include: {
+      movie: true, // Lấy tên phim
+      room: {
+        include: { cinema: true }, // Lấy tên phòng và tên rạp
+      },
+    },
+  });
+
+  if (!showtime) throw new Error('Không tìm thấy suất chiếu này!');
+  return showtime;
+};
+
 //Admin CRUD
 const createShowtime = async (
   movieId: string,
@@ -137,4 +152,4 @@ const createShowtime = async (
   });
 };
 
-export { getShowtimes, getBookedSeats, createShowtime };
+export { getShowtimes, getBookedSeats, getShowtimeById, createShowtime };

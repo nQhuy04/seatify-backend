@@ -95,7 +95,8 @@ model Movie {
   cast         String?
   country      String?
   language     String?
-  releaseDate  DateTime?  
+  releaseDate  DateTime?
+  endDate      DateTime?  
 
   showtimes    Showtime[]
 }
