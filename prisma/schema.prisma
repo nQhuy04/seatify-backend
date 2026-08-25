@@ -83,12 +83,12 @@ model Movie {
   title        String
   description  String?
   movieContent String?
+  backdropUrl  String?
   posterUrl    String?
   trailerUrl   String?  
   filmGenres   String?
   duration     Int
   ageRating    String
-  status       MovieStatus @default(COMING_SOON)
   createdAt    DateTime    @default(now())
   
   director     String?
@@ -101,11 +101,6 @@ model Movie {
   showtimes    Showtime[]
 }
 
-enum MovieStatus {
-  NOW_PLAYING
-  COMING_SOON
-  ARCHIVED
-}
 
 // ------------------------------------------------------
 // NHÓM 3: TRANSACTIONAL DATA (CORE)
