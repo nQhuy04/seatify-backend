@@ -24,9 +24,14 @@ const holdSeats = async (
 
   // MỞ TRANSACTION: Đảm bảo luật ALL or NOTHING (Thành công hết hoặc hủy hết)
   return await prisma.$transaction(async (tx) => {
+    const showtime = await tx.showtime.findUnique({ where: { id: showtimeId } });
+    if (!showtime) throw new Error('Không tìm thấy suất chiếu!');
     // 2. Tìm ID của các ghế vật lý trong phòng dựa vào Row và Number
     const physicalSeats = await tx.seat.findMany({
-      where: { OR: seatConditions },
+      where: {
+        roomId: showtime.roomId,
+        OR: seatConditions,
+      },
     });
 
     if (physicalSeats.length !== seatNames.length) {

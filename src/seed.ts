@@ -129,7 +129,7 @@ async function main() {
       // ================= PHIM ĐANG CHIẾU =================
       {
         title: 'Inside Out 2',
-        trailerUrl: 'https://www.youtube.com/watch?v=LEpuD0B2dEQ',
+        trailerUrl: 'https://www.youtube.com/watch?v=LEjhY15eCx0',
         posterUrl: 'https://m.media-amazon.com/images/I/81do41OmwiL.jpg',
         backdropUrl:
           'https://www.realmomofsfv.com/wp-content/uploads/2024/09/Inside-Out-2-Digital-2-Banner.png',
@@ -147,7 +147,7 @@ async function main() {
       },
       {
         title: 'Nhà Bà Nữ',
-        trailerUrl: 'https://www.youtube.com/watch?v=fW-9YnI7YAA',
+        trailerUrl: 'https://www.youtube.com/watch?v=IkaP0KJWTsQ',
         posterUrl:
           'https://cdn-i.doisongphapluat.com.vn/media/dang-nhat-duy/2022/12/03/poster-phim-tran-thanh-nha-ba-nu-dspl-31220221.jpg',
         backdropUrl:
@@ -298,7 +298,7 @@ async function main() {
       // ================= PHIM SẮP CHIẾU =================
       {
         title: 'Avatar: Fire and Ash',
-        trailerUrl: 'https://www.youtube.com/watch?v=O112mF4EexY', // Link tạm
+        trailerUrl: 'https://www.youtube.com/watch?v=nb_fFj_0rq8',
         posterUrl:
           'https://m.media-amazon.com/images/M/MV5BZDYxY2I1OGMtN2Y4MS00ZmU1LTgyNDAtODA0MzAyYjI0N2Y2XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg',
         backdropUrl: 'https://coolmusicltd.com/wp-content/uploads/2025/07/Avatar.jpeg',
@@ -316,7 +316,7 @@ async function main() {
       },
       {
         title: 'Avengers: Doomsday',
-        trailerUrl: 'https://www.youtube.com/watch?v=O112mF4EexY', // Link tạm
+        trailerUrl: 'https://www.youtube.com/watch?v=irVNGjRFZGk',
         posterUrl:
           'https://preview.redd.it/avengers-doomsday-poster-featuring-the-confirmed-cast-so-v0-b8a68egs9n2f1.jpeg?width=1080&crop=smart&auto=webp&s=084b76fd6c5ce580d9c3a94081595b48137d0314',
         backdropUrl:
@@ -335,7 +335,7 @@ async function main() {
       },
       {
         title: 'Mickey 17',
-        trailerUrl: 'https://www.youtube.com/watch?v=O112mF4EexY', // Link tạm
+        trailerUrl: 'https://www.youtube.com/watch?v=osYpGSz_0i4',
         posterUrl: 'https://image.tmdb.org/t/p/original/zmNHgN6fQQgXgqqALjjRYtgjiQi.jpg',
         backdropUrl:
           'https://movieswetextedabout.com/wp-content/uploads/2025/03/Mickey-17-Movie-Review.webp',
@@ -353,7 +353,7 @@ async function main() {
       },
       {
         title: 'Zootopia 2',
-        trailerUrl: 'https://www.youtube.com/watch?v=O112mF4EexY',
+        trailerUrl: 'https://www.youtube.com/watch?v=BjkIOU5PhyQ',
         posterUrl: 'https://i.ebayimg.com/images/g/7qwAAOSwDyhgBjDv/s-l1200.jpg',
         backdropUrl: 'https://thedisinsider.com/wp-content/uploads/2021/03/scale-5.jpeg',
         description:
