@@ -24,11 +24,12 @@ const getShowtimesByFilter = async (req: Request, res: Response) => {
       message: 'Lấy danh sách suất chiếu thành công!',
       data: showTimes,
     });
-  } catch (error: any) {
-    res.status(500).json({
-      message: 'Lỗi máy chủ khi lấy suất chiếu!',
-      error: error.message,
-    });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: 'Lỗi máy chủ khi lấy suất chiếu!', error: error.message });
+    } else {
+      res.status(500).json({ message: 'Lỗi máy chủ không xác định!' });
+    }
   }
 };
 
@@ -46,11 +47,14 @@ const getSeats = async (req: Request, res: Response) => {
       message: 'Lấy trạng thái ghế thành công!',
       data: bookedSeats, // Dữ liệu trả về sẽ là mảng: ['A1', 'B2']
     });
-  } catch (error: any) {
-    res.status(500).json({
-      message: 'Lỗi máy chủ khi lấy trạng thái ghế!',
-      error: error.message,
-    });
+  } catch (error) {
+    if (error instanceof Error) {
+      res
+        .status(500)
+        .json({ message: 'Lỗi máy chủ khi lấy trạng thái ghế!', error: error.message });
+    } else {
+      res.status(500).json({ message: 'Lỗi máy chủ không xác định!' });
+    }
   }
 };
 
@@ -59,8 +63,12 @@ const getShowtimeDetail = async (req: Request, res: Response) => {
     const { id } = req.params;
     const showtime = await getShowtimeById(id as string);
     res.status(200).json({ message: 'Thành công', data: showtime });
-  } catch (error: any) {
-    res.status(404).json({ message: error.message || 'Lỗi server' });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(404).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: 'Lỗi server không xác định!' });
+    }
   }
 };
 
@@ -80,11 +88,12 @@ const addShowtime = async (req: Request, res: Response) => {
       message: 'Tạo suất chiếu và khởi tạo 180 vé thành công!',
       data: newShowtime,
     });
-  } catch (error: any) {
-    res.status(500).json({
-      message: 'Lỗi máy chủ khi tạo suất chiếu!',
-      error: error.message,
-    });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: 'Lỗi máy chủ khi tạo suất chiếu!', error: error.message });
+    } else {
+      res.status(500).json({ message: 'Lỗi máy chủ không xác định!' });
+    }
   }
 };
 

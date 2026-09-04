@@ -9,11 +9,17 @@ const getCinemas = async (req: Request, res: Response) => {
       message: 'Lấy danh sách Rạp chiếu thành công!',
       data: cinemas,
     });
-  } catch (error: any) {
-    res.status(500).json({
-      message: 'Lỗi máy chủ khi lấy danh sách rạp!',
-      data: error.message,
-    });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({
+        message: 'Lỗi máy chủ khi lấy danh sách rạp!',
+        error: error.message,
+      });
+    } else {
+      res.status(500).json({
+        message: 'Lỗi máy chủ không xác định!',
+      });
+    }
   }
 };
 

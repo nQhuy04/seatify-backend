@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import rootRouter from './routes/index';
+import { startCronJobs } from './services/cron.service';
 
 // Nạp biến môi trường từ file .env
 dotenv.config();
@@ -25,6 +26,8 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/api', rootRouter);
+
+startCronJobs();
 
 app.listen(PORT, () => {
   console.log(`Server Seatify đang chạy thành công tại http://localhost:${PORT}`);

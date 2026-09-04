@@ -37,8 +37,12 @@ const createPaymentUrl = async (req: Request, res: Response) => {
       message: 'Tạo URL Stripe thành công',
       data: { paymentUrl }, // Cái paymentUrl này chính là link của Stripe
     });
-  } catch (error: any) {
-    res.status(500).json({ message: error.message || 'Lỗi server khi tạo URL thanh toán' });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(404).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: 'Lỗi máy chủ khi tạo URL thanh toán!' });
+    }
   }
 };
 
@@ -47,8 +51,12 @@ const confirmPayment = async (req: Request, res: Response) => {
     const { bookingId } = req.body;
     await confirmPaymentSuccess(bookingId);
     res.status(200).json({ message: 'Chốt đơn thành công! Ghế đã thuộc về bạn.' });
-  } catch (error: any) {
-    res.status(400).json({ message: error.message || 'Lỗi khi chốt đơn' });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(404).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: 'Lỗi máy chủ khi xác nhận đơn hàng!' });
+    }
   }
 };
 

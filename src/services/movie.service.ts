@@ -1,18 +1,34 @@
-import { MovieStatus, PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client'; // Đã xóa import MovieStatus rác
 
 const prisma = new PrismaClient();
 
+// --- 1. ĐÚC KHUÔN CHO DỮ LIỆU ĐẦU VÀO ---
+interface MovieInput {
+  title: string;
+  description?: string;
+  posterUrl?: string;
+  trailerUrl?: string;
+  filmGenres?: string;
+  duration: number | string;
+  ageRating: string;
+  director?: string;
+  cast?: string;
+  country?: string;
+  language?: string;
+  releaseDate?: string;
+  endDate?: string;
+}
+
+// --- 2. CÁC HÀM GET (TÍNH TOÁN STATUS ẢO) ---
 const getAllMovies = async () => {
   const movies = await prisma.movie.findMany({
     orderBy: { title: 'asc' },
   });
 
-  //AUTO-STATUS: Tính toán trạng thái ngay lúc gọi API
-  const now = new Date(); // Lấy thời gian hiện tại của máy chủ
+  const now = new Date();
   const processedMovies = movies.map((movie) => {
-    let computedStatus = 'COMING_SOON'; // Mặc định là sắp chiếu
+    let computedStatus = 'COMING_SOON';
 
-    // Nếu phim có set ngày ra mắt và ngày kết thúc
     if (movie.releaseDate && movie.endDate) {
       if (now >= movie.releaseDate && now <= movie.endDate) {
         computedStatus = 'NOW_PLAYING';
@@ -21,7 +37,6 @@ const getAllMovies = async () => {
       }
     }
 
-    // Đóng gói lại, bổ sung thêm biến status giả vào cục JSON để Frontend hiển thị
     return {
       ...movie,
       status: computedStatus,
@@ -40,7 +55,6 @@ const getMovieById = async (id: string) => {
     throw new Error('Không tìm thấy bộ phim này!');
   }
 
-  // ---AUTO-STATUS---
   const now = new Date();
   let computedStatus = 'COMING_SOON';
 
@@ -58,8 +72,10 @@ const getMovieById = async (id: string) => {
   };
 };
 
-const addMovie = async (data: any) => {
-  // Lệnh tạo 1 bộ phim mới vào Database
+// --- 3. CÁC HÀM GHI DỮ LIỆU ---
+
+// Create
+const addMovie = async (data: MovieInput) => {
   const newMovie = await prisma.movie.create({
     data: {
       title: data.title,
@@ -67,20 +83,22 @@ const addMovie = async (data: any) => {
       posterUrl: data.posterUrl,
       trailerUrl: data.trailerUrl,
       filmGenres: data.filmGenres,
-      duration: parseInt(data.duration), // Ép kiểu số
+      duration: typeof data.duration === 'string' ? parseInt(data.duration) : data.duration,
       ageRating: data.ageRating,
-      status: data.status,
+      // Bỏ cột status đi!
       director: data.director,
       cast: data.cast,
       country: data.country,
       language: data.language,
       releaseDate: data.releaseDate ? new Date(data.releaseDate) : null,
+      endDate: data.endDate ? new Date(data.endDate) : null, // VÁ LỖI THIẾU END DATE
     },
   });
   return newMovie;
 };
 
-const updateMovie = async (id: string, data: any) => {
+// Update
+const updateMovie = async (id: string, data: MovieInput) => {
   const updatedMovie = await prisma.movie.update({
     where: { id: id },
     data: {
@@ -89,15 +107,15 @@ const updateMovie = async (id: string, data: any) => {
       posterUrl: data.posterUrl,
       trailerUrl: data.trailerUrl,
       filmGenres: data.filmGenres,
-      duration: parseInt(data.duration),
+      duration: typeof data.duration === 'string' ? parseInt(data.duration) : data.duration,
       ageRating: data.ageRating,
-      status: data.status,
+      // Bỏ cột status đi!
       director: data.director,
       cast: data.cast,
       country: data.country,
       language: data.language,
       releaseDate: data.releaseDate ? new Date(data.releaseDate) : null,
-      endDate: data.endDate ? new Date(data.endDate) : null, // Thêm ngày kết thúc
+      endDate: data.endDate ? new Date(data.endDate) : null,
     },
   });
   return updatedMovie;

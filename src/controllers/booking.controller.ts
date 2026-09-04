@@ -6,6 +6,10 @@ import {
   cancelBooking,
 } from '../services/booking.service';
 
+interface AuthRequest extends Request {
+  user?: { userId: string; role: string };
+}
+
 const holdBooking = async (req: Request, res: Response) => {
   try {
     const { showtimeId, seatNames, guestInfo, totalPrice, userId } = req.body;
@@ -34,20 +38,33 @@ const getBooking = async (req: Request, res: Response) => {
     const { id } = req.params;
     const booking = await getBookingById(id as string);
     res.status(200).json({ message: 'Lấy hóa đơn thành công', data: booking });
-  } catch (error: any) {
-    res.status(404).json({ message: error.message || 'Lỗi server' });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(400).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: 'Lỗi hệ thống khi lấy hóa đơn' });
+    }
   }
 };
 
-const getMyHistory = async (req: Request, res: Response) => {
+const getMyHistory = async (req: AuthRequest, res: Response) => {
   try {
-    // Ông verifyToken đã nhét user vào req rồi, ta chỉ việc lấy ra xài
-    const userId = (req as any).user.userId;
+    // Lấy userId ra một cách an toàn
+    const userId = req.user?.userId;
+
+    if (!userId) {
+      return res.status(401).json({ message: 'Không tìm thấy thông tin xác thực!' });
+    }
+
     const bookings = await getMyBookings(userId);
 
     res.status(200).json({ message: 'Lấy lịch sử thành công', data: bookings });
-  } catch (error: any) {
-    res.status(500).json({ message: error.message || 'Lỗi server' });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: 'Lỗi máy chủ không xác định!' });
+    }
   }
 };
 

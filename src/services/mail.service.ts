@@ -1,5 +1,28 @@
 import nodemailer from 'nodemailer';
 
+// --- KHUÔN DỮ LIỆU DÀNH CHO BƯU TÁ ---
+interface TicketSeatMail {
+  seat: {
+    row: string;
+    number: number;
+  };
+  showtime: {
+    startTime: Date | string;
+    movie: { title: string };
+    room: {
+      name: string;
+      cinema: { name: string };
+    };
+  };
+}
+
+interface BookingMailData {
+  id: string;
+  guestName: string | null;
+  totalPrice: number;
+  ticketSeats: TicketSeatMail[];
+}
+
 // Khởi tạo Bưu tá với tài khoản Gmail của bạn
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
@@ -15,11 +38,13 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendTicketEmail = async (customerEmail: string, bookingData: any) => {
+const sendTicketEmail = async (customerEmail: string, bookingData: BookingMailData) => {
   try {
     const ticketSeats = bookingData.ticketSeats;
     const showtime = ticketSeats[0].showtime;
-    const seatNames = ticketSeats.map((ts: any) => `${ts.seat.row}${ts.seat.number}`).join(', ');
+
+    // Bỏ chữ ': any' ở ts đi vì TypeScript giờ đã tự hiểu ts là TicketSeatMail
+    const seatNames = ticketSeats.map((ts) => `${ts.seat.row}${ts.seat.number}`).join(', ');
     const startTime = new Date(showtime.startTime);
 
     const formattedDate = startTime.toLocaleDateString('vi-VN');

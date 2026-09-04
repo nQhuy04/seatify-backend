@@ -27,7 +27,11 @@ export const verifyToken = (req: AuthRequest, res: Response, next: NextFunction)
 
     next();
   } catch (error) {
-    return res.status(401).json({ message: 'Vé thông hành giả hoặc đã hết hạn!' });
+    if (error instanceof Error) {
+      return res.status(401).json({ message: 'Vé thông hành giả hoặc đã hết hạn!' });
+    } else {
+      return res.status(500).json({ message: 'Lỗi máy chủ không xác định!' });
+    }
   }
 };
 

@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma, TicketStatus } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -9,7 +9,7 @@ const getShowtimes = async (movieId: string, cinemaId: string | undefined, dateS
   endDate.setDate(startDate.getDate() + 1);
 
   // 1. Tạo hộp điều kiện linh hoạt
-  const whereCondition: any = {
+  const whereCondition: Prisma.ShowtimeWhereInput = {
     movieId: movieId,
     startTime: {
       gte: startDate,
@@ -139,7 +139,7 @@ const createShowtime = async (
         showtimeId: newShowtime.id,
         seatId: seat.id,
         price: surcharge, // Lưu tiền phụ thu vào đây
-        status: 'AVAILABLE' as any,
+        status: TicketStatus.AVAILABLE,
       };
     });
 

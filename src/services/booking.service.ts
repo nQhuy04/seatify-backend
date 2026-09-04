@@ -8,6 +8,12 @@ interface GuestInfo {
   phone: string;
 }
 
+interface LockedTicketSeat {
+  id: string;
+  status: string;
+  lockedUntil: Date | null;
+}
+
 const holdSeats = async (
   showtimeId: string,
   seatNames: string[],
@@ -55,7 +61,7 @@ const holdSeats = async (
     // Lệnh này ép PostgreSQL khóa cứng các dòng TicketSeat này lại.
     // Nếu có 2 Request gọi cùng 1 mili-giây, 1 thằng sẽ bị bắt đứng xếp hàng chờ!
     // ====================================================================
-    const lockedTicketSeats = await tx.$queryRaw<any[]>`
+    const lockedTicketSeats = await tx.$queryRaw<LockedTicketSeat[]>`
       SELECT id, status, "lockedUntil" 
       FROM "TicketSeat" 
       WHERE id IN (${Prisma.join(ticketSeatIds)}) 
@@ -66,7 +72,10 @@ const holdSeats = async (
     const now = new Date();
     for (const ts of lockedTicketSeats) {
       // Ghế đã BÁN, hoặc đang HOLDING và chưa hết hạn 5 phút
-      if (ts.status === 'BOOKED' || (ts.status === 'HOLDING' && ts.lockedUntil > now)) {
+      if (
+        ts.status === 'BOOKED' ||
+        (ts.status === 'HOLDING' && ts.lockedUntil && ts.lockedUntil > now)
+      ) {
         throw new Error('Rất tiếc! Ghế bạn chọn hiện đã có người chọn. Vui lòng chọn ghế khác!');
       }
     }
@@ -103,13 +112,32 @@ const holdSeats = async (
 const getBookingById = async (bookingId: string) => {
   const booking = await prisma.booking.findUnique({
     where: { id: bookingId },
-    // Dùng phép thuật JOIN sâu 4 tầng của Prisma để lôi toàn bộ thông tin lên mặt đất!
-    include: {
+    // CHUẨN SENIOR: Dùng 'select' để chỉ định đích danh từng cột cần lấy
+    select: {
+      id: true,
+      guestName: true,
+      guestEmail: true,
+      guestPhone: true,
+      totalPrice: true,
+      status: true,
+      userId: true,
       ticketSeats: {
-        include: {
-          seat: true,
+        select: {
+          lockedUntil: true,
+          seat: {
+            select: { row: true, number: true }, // Chỉ lấy dòng và số ghế
+          },
           showtime: {
-            include: { movie: true, room: { include: { cinema: true } } },
+            select: {
+              startTime: true,
+              movie: { select: { title: true, ageRating: true } }, // Không lấy mô tả, trailer...
+              room: {
+                select: {
+                  name: true,
+                  cinema: { select: { name: true, location: true } },
+                },
+              },
+            },
           },
         },
       },
@@ -122,13 +150,25 @@ const getBookingById = async (bookingId: string) => {
 
 const getMyBookings = async (userId: string) => {
   const bookings = await prisma.booking.findMany({
-    where: { userId: userId }, // Chỉ lấy hóa đơn của ông này
-    orderBy: { createdAt: 'desc' }, // Xếp hóa đơn mới nhất lên đầu
-    include: {
+    where: { userId: userId },
+    orderBy: { createdAt: 'desc' },
+    // CHUẨN SENIOR: Giảm thiểu tối đa dung lượng để tải danh sách nhanh hơn
+    select: {
+      id: true,
+      totalPrice: true,
+      status: true,
+      createdAt: true,
       ticketSeats: {
-        include: {
+        select: {
           showtime: {
-            include: { movie: true, room: { include: { cinema: true } } },
+            select: {
+              movie: { select: { title: true } },
+              room: {
+                select: {
+                  cinema: { select: { name: true } },
+                },
+              },
+            },
           },
         },
       },

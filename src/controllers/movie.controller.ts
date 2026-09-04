@@ -9,11 +9,17 @@ const getMovies = async (req: Request, res: Response) => {
       message: 'Lấy danh sách phim thành công!',
       data: movies,
     });
-  } catch (error: any) {
-    res.status(500).json({
-      message: 'Lỗi máy chủ khi lấy danh sách phim!',
-      error: error.message,
-    });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({
+        message: 'Lỗi máy chủ khi lấy danh sách phim!',
+        error: error.message,
+      });
+    } else {
+      res.status(500).json({
+        message: 'Lỗi máy chủ không xác định!',
+      });
+    }
   }
 };
 
@@ -31,7 +37,7 @@ const getMovie = async (req: Request, res: Response) => {
     if (error instanceof Error) {
       res.status(404).json({ message: error.message });
     } else {
-      res.status(500).json({ message: 'Lỗi máy chủ!' });
+      res.status(500).json({ message: 'Lỗi máy chủ không xác định!' });
     }
   }
 };
@@ -43,10 +49,12 @@ const createMovie = async (req: Request, res: Response) => {
       message: 'Thêm phim mới thành công!',
       data: newMovie,
     });
-  } catch (error: any) {
-    res.status(400).json({
-      message: error.message || 'Lỗi khi thêm phim mới!',
-    });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(404).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: 'Lỗi máy chủ không xác định!' });
+    }
   }
 };
 
@@ -58,8 +66,12 @@ const editMovie = async (req: Request, res: Response) => {
       message: 'Cập nhật phim thành công!',
       data: updatedMovie,
     });
-  } catch (error: any) {
-    res.status(400).json({ message: error.message || 'Lỗi khi cập nhật phim!' });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(404).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: 'Lỗi máy chủ không xác định!' });
+    }
   }
 };
 

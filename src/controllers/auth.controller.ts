@@ -15,10 +15,12 @@ const register = async (req: Request, res: Response) => {
       message: 'Đăng ký tài khoản thành công!',
       data: newUser,
     });
-  } catch (error: any) {
-    res.status(400).json({
-      message: error.message,
-    });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(400).json({ message: error.message });
+    } else {
+      res.status(400).json({ message: 'Lỗi đăng ký không xác định!' });
+    }
   }
 };
 
@@ -36,10 +38,12 @@ const login = async (req: Request, res: Response) => {
       message: 'Đăng nhập thành công!',
       data: result,
     });
-  } catch (error: any) {
-    res.status(400).json({
-      message: error.message,
-    });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(400).json({ message: error.message });
+    } else {
+      res.status(400).json({ message: 'Lỗi đăng nhập không xác định!' });
+    }
   }
 };
 
