@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 5000;
 // app.use(cors()); // Cho phép Frontend gọi API không bị chặn
 app.use(
   cors({
-    origin: ['http://localhost:5173', ''], // Thêm link FE public vào đây
+    origin: ['http://localhost:5173', process.env.FRONTEND_URL as string],
     credentials: true,
   }),
 );
